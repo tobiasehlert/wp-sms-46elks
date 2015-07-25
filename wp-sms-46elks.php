@@ -9,27 +9,30 @@
  */
 
 /*
-Plugin Name:    WordPress SMS 46elks
+Plugin Name:    WordPress SMS for 46elks
 Plugin URI:     http://ehlert.se/wordpress-plugins/wp-sms-46elks/
-Description:    Wordpress module for sending SMS using 46elks. It's displayed in the WordPress admin area.
+Description:    WordPress module for sending SMS using 46elks. It's displayed in the WordPress admin area.
 Version:        0.1
 Author:         Tobias Ehlert
 Author URI:     http://ehlert.se/
 License:        GPL2
 License URI:    http://www.gnu.org/licenses/gpl-2.0.txt
+Text Domain:    wp-sms-46elks
+Domain Path:    /languages
+
  
-WordPress SMS 46elks is free software: you can redistribute it and/or modify
+WordPress SMS for 46elks is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 any later version.
  
-WordPress SMS 46elks is distributed in the hope that it will be useful,
+WordPress SMS for 46elks is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
  
 You should have received a copy of the GNU General Public License
-along with WordPress SMS 46elks.
+along with WordPress SMS for 46elks.
 */
 
 if ( !class_exists( 'WPSMS46elks' ) )
@@ -39,6 +42,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         private         $plugin_slug    = 'wp-sms-46elks';
         private         $debug          = false;
         private         $from           = 'SSSF';
+        private         $SMSprice       = '0,35';
         private         $API_uri        = 'https://api.46elks.com/a1';
 
 		protected       $API_basic  = array();
@@ -99,14 +103,14 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 if ( $this->result['success'] >= 1 )
                 {
                     $data['body'] = json_decode( $this->APIresult[0]['servermsg']['body'] );
-                    $this->status['success'] = 'Your message was successful when sending to '.$this->result['success'].' cellphones!<br />'.
-                        'The SMS cost was '.( $this->convertBalanceValue ( $this->result['success'] * $data['body']->cost ) ).' sek';
+                    $this->status['success'] = __('Your message was successful when sending to', 'wp-sms-46elks').' '.$this->result['success'].' '.__('cellphones', 'wp-sms-46elks').'!<br />'.
+                        __('The SMS cost was ', 'wp-sms-46elks').( $this->convertBalanceValue ( $this->result['success'] * $data['body']->cost ) ).' sek';
                 }
                 if ( $this->result['failed'] >= 1 )
-                    $this->status['failed'] = 'Your message failed when sending to '.$this->result['failed'].' cellphones!';
+                    $this->status['failed'] = __('Your message failed when sending to', 'wp-sms-46elks').' '.$this->result['failed'].' '.__('cellphones', 'wp-sms-46elks').'!';
             }
             elseif ( isset( $_POST['wp-sms-46elks-message'] ) )
-                $this->status['failed'] = 'You forgot to enter a message!';
+                $this->status['failed'] = __('You forgot to enter a message!', 'wp-sms-46elks');
             
             // getting the current account balance for status window
             $this->getAccountBalance();
@@ -114,14 +118,14 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         function wpsms46elks_wp_dashboard_setup ()
         {
-            wp_add_dashboard_widget( $this->plugin_slug.'-dashboard', 'WordPress SMS 46elks', array( $this, 'wpsms46elks_dashboard_content' ), null );
+            wp_add_dashboard_widget( $this->plugin_slug.'-dashboard', __( 'WordPress SMS for 46elks', 'wp-sms-46elks' ), array( $this, 'wpsms46elks_dashboard_content' ), null );
         }
         function wpsms46elks_dashboard_content ()
         {
             if ( ! $this->InvalidAccount )
             {
                 ?>
-                <h4>Account balance</h4>
+                <h4><?php _e( 'Account balance', 'wp-sms-46elks' );?></h4>
                 <?php
                 $this->wpsms46elks_account_status();
                 ?>
@@ -129,7 +133,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 <?php
             }
             ?>
-            <p><a href="<?php echo admin_url( 'admin.php?page='.$this->plugin_slug ); ?>">Go to plugin page</a></p>
+            <p><a href="<?php echo admin_url( 'admin.php?page='.$this->plugin_slug ); ?>"><?php _e( 'Go to plugin page', 'wp-sms-46elks' );?></a></p>
             <?php
         }
         
@@ -177,7 +181,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             {
                 $this->InvalidAccount = array(
                     'status' => true,
-                    'msg' => '401 Authorization Required'
+                    'msg' => '401 '.__( 'Authorization Required', 'wp-sms-46elks' )
                 );
                 return false;
             }
@@ -197,12 +201,12 @@ if ( !class_exists( 'WPSMS46elks' ) )
         {
             ?>
             <p>
-                46elks account name: <?php echo $this->AccountBalance['name']; ?><br />
-                46elks credits left: <b><?php echo $this->convertBalanceValue( $this->AccountBalance['leftcred'] ); ?> sek</b>
+                <?php _e( '46elks account name', 'wp-sms-46elks'); ?>: <?php echo $this->AccountBalance['name']; ?><br />
+                <?php _e( '46elks credits left', 'wp-sms-46elks'); ?>: <b><?php echo $this->convertBalanceValue( $this->AccountBalance['leftcred'] ); ?> sek</b>
             </p>
             <p>
-                Cost per 1 SMS: 0,35 kr<br />
-                Current amount of receivers: <?php echo count( $this->receivers ); ?>
+                <?php _e( 'Cost per 1 SMS', 'wp-sms-46elks'); ?>: <?php echo $this->SMSprice; ?> kr<br />
+                <?php _e( 'Current amount of receivers', 'wp-sms-46elks'); ?>: <?php echo count( $this->receivers ); ?>
             </p>
             <?php
         }
@@ -219,7 +223,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             ?>
             <div class="wrap">
 
-                <h2>WordPress SMS for 46elks</h2>
+                <h2><?php _e( 'WordPress SMS for 46elks', 'wp-sms-46elks' ); ?></h2>
 
                 <?php
                 if ( $this->InvalidAccount )
@@ -227,8 +231,8 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     ?>
                     <div class="notice notice-error">
                         <p>
-                            <b>46elks credentials wrong or missing.</b><br />
-                            Error: <?php echo $this->InvalidAccount['msg']; ?>
+                            <b><?php _e( '46elks credentials wrong or missing.', 'wp-sms-46elks' );?></b><br />
+                            <?php _e( 'Error', 'wp-sms-46elks' );?>: <?php echo $this->InvalidAccount['msg']; ?>
                         </p>
                     </div>
                     <?php
@@ -258,7 +262,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                         ?>
                         <div id="wp-sms-46elks-new-container" class="postbox-container" style="width: 100%;" >
                             <div class="postbox " id="wp-sms-46elks-new"  >
-                                <h3 class="hndle" style="cursor: inherit;"><span>Send new SMS</span></h3>
+                                <h3 class="hndle" style="cursor: inherit;"><span><?php _e( 'Send SMS', 'wp-sms-46elks' );?></span></h3>
                                 <div class="inside">
 
                                     <script type="text/javascript" >
@@ -293,25 +297,25 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                         <table class="form-table">
                                             <tbody>
                                                 <tr>
-                                                    <th><label for="wp-sms-46elks-from">From</label></th>
+                                                    <th><label for="wp-sms-46elks-from"><?php _e( 'From', 'wp-sms-46elks' );?></label></th>
                                                     <td><input type="text" name="wp-sms-46elks-from" id="wp-sms-46elks-from" value="<?php echo $this->from; ?>" class="regular-text" readonly ></td>
                                                 </tr>
                                                 <tr>
-                                                    <th><label for="wp-sms-46elks-to">To</label></th>
-                                                    <td><input type="text" name="wp-sms-46elks-to" id="wp-sms-46elks-to" value="All WordPress users with cellphones" class="regular-text" readonly ></td>
+                                                    <th><label for="wp-sms-46elks-to"><?php _e( 'To', 'wp-sms-46elks' );?></label></th>
+                                                    <td><input type="text" name="wp-sms-46elks-to" id="wp-sms-46elks-to" value="<?php _e( 'All WordPress users with cellphones', 'wp-sms-46elks' );?>" class="regular-text" readonly ></td>
                                                 </tr>
                                                 <tr>
-                                                    <th><label for="wp-sms-46elks-message">Message content</label></th>
-                                                    <td><textarea id="wp-sms-46elks-message" name="wp-sms-46elks-message" placeholder="Write your SMS text here.." rows="5" cols="30" ></textarea>
+                                                    <th><label for="wp-sms-46elks-message"><?php _e( 'Message content', 'wp-sms-46elks' );?></label></th>
+                                                    <td><textarea id="wp-sms-46elks-message" name="wp-sms-46elks-message" placeholder="<?php _e( 'Write your SMS text here..', 'wp-sms-46elks' );?>" rows="5" cols="30" ></textarea>
                                                         <p class="wp-sms-46elks-message-description">
-                                                            <span id="wp-sms-46elks-message-used-chars">160</span>/<span id="wp-sms-46elks-message-total-chars">160</span> characters remaining ( <span id="wp-sms-46elks-message-sms-count">1</span> SMS )
+                                                            <span id="wp-sms-46elks-message-used-chars">160</span>/<span id="wp-sms-46elks-message-total-chars">160</span> <?php _e( 'characters remaining', 'wp-sms-46elks' );?> ( <span id="wp-sms-46elks-message-sms-count">1</span> <?php _e( 'SMS', 'wp-sms-46elks' );?> )
                                                         </p>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th>&nbsp;</th>
                                                     <td>
-                                                        <?php submit_button( 'Send SMS', 'primary', $this->plugin_slug.'-submit', true, array( 'disabled' => 'disabled') ); ?>
+                                                        <?php submit_button( __('Send SMS', 'wp-sms-46elks'), 'primary', $this->plugin_slug.'-submit', true, array( 'disabled' => 'disabled') ); ?>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -328,7 +332,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     
                     <div id="wp-sms-46elks-account-container" class="postbox-container" style="width: 100%;" >
                         <div class="postbox " id="wp-sms-46elks-account"  >
-                            <h3 class="hndle" style="cursor: inherit;"><span>46elks account</span></h3>
+                            <h3 class="hndle" style="cursor: inherit;"><span><?php _e( '46elks account', 'wp-sms-46elks' );?></span></h3>
                             <div class="inside">
                                 
                                 <?php
@@ -346,7 +350,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                 if ( is_super_admin() )
                                 {
                                     ?>
-                                    <h4>Account credentials</h4>
+                                    <h4><?php _e( 'Account credentials', 'wp-sms-46elks' );?></h4>
                                     <form method="POST" action="options.php" >
                                         <?php
                                         settings_fields( $this->plugin_slug.'-settings' );
@@ -355,11 +359,11 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                         <table class="form-table">
                                             <tbody>
                                                 <tr>
-                                                    <th><label for="wp-sms-46elks-api-username">Your API username</label></th>
+                                                    <th><label for="wp-sms-46elks-api-username"><?php _e( 'Your API username', 'wp-sms-46elks' );?></label></th>
                                                     <td><input type="text" name="wp-sms-46elks-api-username" id="wp-sms-46elks-api-username" value="<?php echo get_option($this->plugin_slug.'-api-username'); ?>" class="regular-text" ></td>
                                                 </tr>
                                                 <tr>
-                                                    <th><label for="wp-sms-46elks-api-password">Your API password</label></th>
+                                                    <th><label for="wp-sms-46elks-api-password"><?php _e( 'Your API password', 'wp-sms-46elks' );?></label></th>
                                                     <td><input type="password" name="wp-sms-46elks-api-password" id="wp-sms-46elks-api-password" value="<?php echo get_option($this->plugin_slug.'-api-password'); ?>" class="regular-text" ></td>
                                                 </tr>
                                                 <tr>
@@ -387,7 +391,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 {
                     ?>
                     <hr />
-                    <h4>$this</h4>
+                    <h4><?php _e( 'Debug $this', 'wp-sms-46elks' );?></h4>
                     <pre>
                         <?php print_r( $this ); ?>
                     </pre>
@@ -493,7 +497,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         
         function wpsms46elks_admin_menu() {
-            add_menu_page( 'WordPress SMS 46elks', 'SMS', 'publish_pages', $this->plugin_slug, array( $this, 'wpsms46elks_gui' ), 'dashicons-testimonial', 3.98765  );
+            add_menu_page( __( 'WordPress SMS for 46elks', 'wp-sms-46elks' ), __('SMS via 46elks', 'wp-sms-46elks'), 'publish_pages', $this->plugin_slug, array( $this, 'wpsms46elks_gui' ), 'dashicons-testimonial', 3.98765  );
         }
         
         function wpsms46elks_admin_init()

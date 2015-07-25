@@ -1,0 +1,158 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress SMS for 46elks\n"
+"POT-Creation-Date: 2015-07-25 23:12+0200\n"
+"PO-Revision-Date: 2015-07-25 23:12+0200\n"
+"Last-Translator: Tobias Ehlert <tobias.ehlert@gmail.com>\n"
+"Language-Team: Tobias Ehlert <tobias.ehlert@gmail.com>\n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: wp-sms-46elks.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: wp-sms-46elks.php:106
+msgid "Your message was successful when sending to"
+msgstr "Ditt meddelande var framgångsrik när du skickar till"
+
+#: wp-sms-46elks.php:106 wp-sms-46elks.php:110
+msgid "cellphones"
+msgstr "mobiltelefoner"
+
+#: wp-sms-46elks.php:107
+msgid "The SMS cost was "
+msgstr "SMS kostnaden var"
+
+#: wp-sms-46elks.php:110
+msgid "Your message failed when sending to"
+msgstr "Ditt meddelande misslyckades när du skickar till"
+
+#: wp-sms-46elks.php:113
+msgid "You forgot to enter a message!"
+msgstr "Du glömde att ange ett meddelande!"
+
+#. Plugin Name of the plugin/theme
+#: wp-sms-46elks.php:121 wp-sms-46elks.php:226 wp-sms-46elks.php:500
+msgid "WordPress SMS for 46elks"
+msgstr "WordPress SMS för 46elks"
+
+#: wp-sms-46elks.php:128
+msgid "Account balance"
+msgstr "Kontosaldo"
+
+#: wp-sms-46elks.php:136
+msgid "Go to plugin page"
+msgstr "Gå till plugin-sidan"
+
+#: wp-sms-46elks.php:184
+msgid "Authorization Required"
+msgstr "Tillstånd krävs"
+
+#: wp-sms-46elks.php:204
+msgid "46elks account name"
+msgstr "46elks konto namn"
+
+#: wp-sms-46elks.php:205
+msgid "46elks credits left"
+msgstr "46elks krediter kvar"
+
+#: wp-sms-46elks.php:208
+msgid "Cost per 1 SMS"
+msgstr "Kostnad per 1 SMS"
+
+#: wp-sms-46elks.php:209
+msgid "Current amount of receivers"
+msgstr "Aktuell mängd mottagare"
+
+#: wp-sms-46elks.php:234
+msgid "46elks credentials wrong or missing."
+msgstr "46elks autentiseringsuppgifter fel eller saknas."
+
+#: wp-sms-46elks.php:235
+msgid "Error"
+msgstr "Fel"
+
+#: wp-sms-46elks.php:265 wp-sms-46elks.php:318
+msgid "Send SMS"
+msgstr "Skicka SMS"
+
+#: wp-sms-46elks.php:300
+msgid "From"
+msgstr "Från"
+
+#: wp-sms-46elks.php:304
+msgid "To"
+msgstr "Till"
+
+#: wp-sms-46elks.php:305
+msgid "All WordPress users with cellphones"
+msgstr "Alla WordPress användare med mobiltelefoner"
+
+#: wp-sms-46elks.php:308
+msgid "Message content"
+msgstr "Meddelandeinnehåll"
+
+#: wp-sms-46elks.php:309
+msgid "Write your SMS text here.."
+msgstr "Skriv SMS text här..."
+
+#: wp-sms-46elks.php:311
+msgid "characters remaining"
+msgstr "tecken kvar"
+
+#: wp-sms-46elks.php:311
+msgid "SMS"
+msgstr "SMS"
+
+#: wp-sms-46elks.php:335
+msgid "46elks account"
+msgstr "46elks konto"
+
+#: wp-sms-46elks.php:353
+msgid "Account credentials"
+msgstr "Kontoautentiseringsuppgifter"
+
+#: wp-sms-46elks.php:362
+msgid "Your API username"
+msgstr "Ditt API användarnamn"
+
+#: wp-sms-46elks.php:366
+msgid "Your API password"
+msgstr "Ditt API lösenord"
+
+#: wp-sms-46elks.php:394
+msgid "Debug $this"
+msgstr "Debugga $this"
+
+#: wp-sms-46elks.php:500
+msgid "SMS via 46elks"
+msgstr "SMS via 46elks"
+
+#. Plugin URI of the plugin/theme
+msgid "http://ehlert.se/wordpress-plugins/wp-sms-46elks/"
+msgstr "http://ehlert.se/wordpress-plugins/wp-sms-46elks/"
+
+#. Description of the plugin/theme
+msgid ""
+"WordPress module for sending SMS using 46elks. It's displayed in the "
+"WordPress admin area."
+msgstr ""
+"WordPress-modulen för att skicka SMS med hjälp av 46elks. Det visas i "
+"WordPress admin området."
+
+#. Author of the plugin/theme
+msgid "Tobias Ehlert"
+msgstr "Tobias Ehlert"
+
+#. Author URI of the plugin/theme
+msgid "http://ehlert.se/"
+msgstr "http://ehlert.se/"
