@@ -41,7 +41,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
 	{
         private         $plugin_slug    = 'wp-sms-46elks';
         private         $cellphone_slug = 'cellphone';
-        private         $debug          = true;
+        private         $debug          = false;
         private         $frommaxlength  = '11';
         private         $totalSMScost   = '0';
         private         $credMultiply   = '10000';
