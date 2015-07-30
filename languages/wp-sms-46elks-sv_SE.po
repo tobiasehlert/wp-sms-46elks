@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress SMS for 46elks\n"
-"POT-Creation-Date: 2015-07-25 23:12+0200\n"
-"PO-Revision-Date: 2015-07-25 23:12+0200\n"
+"POT-Creation-Date: 2015-07-30 04:49+0200\n"
+"PO-Revision-Date: 2015-07-30 04:58+0200\n"
 "Last-Translator: Tobias Ehlert <tobias.ehlert@gmail.com>\n"
 "Language-Team: Tobias Ehlert <tobias.ehlert@gmail.com>\n"
 "Language: sv_SE\n"
@@ -15,125 +15,205 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
-"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: wp-sms-46elks.php:106
+#: wp-sms-46elks.php:94
 msgid "Your message was successful when sending to"
 msgstr "Ditt meddelande var framgångsrik när du skickar till"
 
-#: wp-sms-46elks.php:106 wp-sms-46elks.php:110
+#: wp-sms-46elks.php:94 wp-sms-46elks.php:98
 msgid "cellphones"
 msgstr "mobiltelefoner"
 
-#: wp-sms-46elks.php:107
+#: wp-sms-46elks.php:95
 msgid "The SMS cost was "
 msgstr "SMS kostnaden var"
 
-#: wp-sms-46elks.php:110
+#: wp-sms-46elks.php:98
 msgid "Your message failed when sending to"
 msgstr "Ditt meddelande misslyckades när du skickar till"
 
-#: wp-sms-46elks.php:113
-msgid "You forgot to enter a message!"
-msgstr "Du glömde att ange ett meddelande!"
+#: wp-sms-46elks.php:101
+msgid "You forgot to enter a message"
+msgstr "Du glömde att skriva in ett meddelande"
 
 #. Plugin Name of the plugin/theme
-#: wp-sms-46elks.php:121 wp-sms-46elks.php:226 wp-sms-46elks.php:500
+#: wp-sms-46elks.php:109 wp-sms-46elks.php:409 wp-sms-46elks.php:988
 msgid "WordPress SMS for 46elks"
 msgstr "WordPress SMS för 46elks"
 
-#: wp-sms-46elks.php:128
-msgid "Account balance"
-msgstr "Kontosaldo"
+#: wp-sms-46elks.php:117 wp-sms-46elks.php:436
+msgid "There are only a few credits left"
+msgstr "Det finns endast ett lite krediter kvar"
 
-#: wp-sms-46elks.php:136
+#: wp-sms-46elks.php:126
+msgid "There are no credits left"
+msgstr "Det finns inga krediter kvar"
+
+#: wp-sms-46elks.php:135
 msgid "Go to plugin page"
 msgstr "Gå till plugin-sidan"
 
-#: wp-sms-46elks.php:184
-msgid "Authorization Required"
-msgstr "Tillstånd krävs"
-
-#: wp-sms-46elks.php:204
+#: wp-sms-46elks.php:372
 msgid "46elks account name"
 msgstr "46elks konto namn"
 
-#: wp-sms-46elks.php:205
+#: wp-sms-46elks.php:376
 msgid "46elks credits left"
 msgstr "46elks krediter kvar"
 
-#: wp-sms-46elks.php:208
-msgid "Cost per 1 SMS"
-msgstr "Kostnad per 1 SMS"
+#: wp-sms-46elks.php:382
+msgid "unavailable"
+msgstr "ej tillgänglig"
 
-#: wp-sms-46elks.php:209
-msgid "Current amount of receivers"
-msgstr "Aktuell mängd mottagare"
+#: wp-sms-46elks.php:391 wp-sms-46elks.php:417
+msgid "46elks credentials wrong or missing"
+msgstr "46elks autentiseringsuppgifter fel eller saknas"
 
-#: wp-sms-46elks.php:234
-msgid "46elks credentials wrong or missing."
-msgstr "46elks autentiseringsuppgifter fel eller saknas."
-
-#: wp-sms-46elks.php:235
+#: wp-sms-46elks.php:422
 msgid "Error"
 msgstr "Fel"
 
-#: wp-sms-46elks.php:265 wp-sms-46elks.php:318
+#: wp-sms-46elks.php:435
+msgid "Few credits left"
+msgstr "Lite krediter kvar"
+
+#: wp-sms-46elks.php:446
+msgid "No credits left"
+msgstr "Inga krediter kvar"
+
+#: wp-sms-46elks.php:447
+msgid ""
+"There are not enought credits left to perform sending of SMS to all receivers"
+msgstr ""
+"Det finns inte tillräckligt med krediter kvar för att utföra skickar SMS "
+"till alla mottagare"
+
+#: wp-sms-46elks.php:478 wp-sms-46elks.php:529
 msgid "Send SMS"
 msgstr "Skicka SMS"
 
-#: wp-sms-46elks.php:300
+#: wp-sms-46elks.php:515
 msgid "From"
 msgstr "Från"
 
-#: wp-sms-46elks.php:304
-msgid "To"
-msgstr "Till"
-
-#: wp-sms-46elks.php:305
-msgid "All WordPress users with cellphones"
-msgstr "Alla WordPress användare med mobiltelefoner"
-
-#: wp-sms-46elks.php:308
+#: wp-sms-46elks.php:519
 msgid "Message content"
 msgstr "Meddelandeinnehåll"
 
-#: wp-sms-46elks.php:309
+#: wp-sms-46elks.php:520
 msgid "Write your SMS text here.."
 msgstr "Skriv SMS text här..."
 
-#: wp-sms-46elks.php:311
+#: wp-sms-46elks.php:522
 msgid "characters remaining"
 msgstr "tecken kvar"
 
-#: wp-sms-46elks.php:311
+#: wp-sms-46elks.php:522 wp-sms-46elks.php:820
 msgid "SMS"
 msgstr "SMS"
 
-#: wp-sms-46elks.php:335
-msgid "46elks account"
-msgstr "46elks konto"
+#: wp-sms-46elks.php:549
+msgid "Account status"
+msgstr "Kontostatus"
 
-#: wp-sms-46elks.php:353
-msgid "Account credentials"
-msgstr "Kontoautentiseringsuppgifter"
+#: wp-sms-46elks.php:562
+msgid "Current receivers"
+msgstr "Nuvarande mottagare"
 
-#: wp-sms-46elks.php:362
+#: wp-sms-46elks.php:566
+msgid "Current amount of receivers"
+msgstr "Aktuell mängd mottagare"
+
+#: wp-sms-46elks.php:593
+msgid "Cost history"
+msgstr "Kostnadshistorik"
+
+#: wp-sms-46elks.php:618
+msgid "Settings"
+msgstr "Inställningar"
+
+#: wp-sms-46elks.php:631
+msgid "SMS from name / number"
+msgstr "SMS från namn / nummer"
+
+#: wp-sms-46elks.php:634
+msgid ""
+"When using an alphanumeric \"from\" it needs to be between 3-11 characters "
+"in length and you are restricted to using only a-z, A-Z, 0-9."
+msgstr ""
+"När du använder ett alfanumeriskt \"från\" det måste vara mellan 3-11 tecken "
+"och du är begränsad till att använda bara a-z, A-Z, 0-9."
+
+#: wp-sms-46elks.php:635
+msgid ""
+"No other characters can be used, and the name has to begin with a letter."
+msgstr "Inga andra tecken kan användas, och namnet måste börja med en bokstav."
+
+#: wp-sms-46elks.php:643
+msgid "Send balancealert email"
+msgstr "Skicka balancealert e-post"
+
+#: wp-sms-46elks.php:646
+msgid ""
+"Enter an balancealert value to account on which the pageadmin will get "
+"notification on low credits."
+msgstr ""
+"Ange en balancealert värde till konto som administratören kommer att få "
+"meddelande om låga krediter."
+
+#: wp-sms-46elks.php:647
+msgid "Number must be an integer like 5, which means 5 which is in"
+msgstr "Numret måste vara ett heltal som 5, vilket innebär 5 som är i"
+
+#: wp-sms-46elks.php:654
+msgid "Extra filter on users"
+msgstr "Extra filter på användare"
+
+#: wp-sms-46elks.php:657
+msgid ""
+"Its possible to add extra filter on the retrieval of cellphone numbers of "
+"users. Values need to be metadata on users."
+msgstr ""
+"Det är möjlighet att lägga till extra filter på hämtning av mobilnummer av "
+"användare. Värden måste vara metadata på användare."
+
+#: wp-sms-46elks.php:658
+msgid "Example: status = 1"
+msgstr "Exempel: status = 1"
+
+#: wp-sms-46elks.php:670
 msgid "Your API username"
 msgstr "Ditt API användarnamn"
 
-#: wp-sms-46elks.php:366
+#: wp-sms-46elks.php:674
 msgid "Your API password"
 msgstr "Ditt API lösenord"
 
-#: wp-sms-46elks.php:394
+#: wp-sms-46elks.php:701
 msgid "Debug $this"
 msgstr "Debugga $this"
 
-#: wp-sms-46elks.php:500
+#: wp-sms-46elks.php:817
+msgid "Month"
+msgstr "Månad"
+
+#: wp-sms-46elks.php:818
+msgid "Cost"
+msgstr "Kostnad"
+
+#: wp-sms-46elks.php:819
+msgid "Destination"
+msgstr "Destination"
+
+#: wp-sms-46elks.php:861
+msgid "No SMS sent yet so there is no history available."
+msgstr "Inga SMS skickade än så det finns ingen historik."
+
+#: wp-sms-46elks.php:988
 msgid "SMS via 46elks"
 msgstr "SMS via 46elks"
 
