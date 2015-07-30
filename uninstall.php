@@ -13,5 +13,10 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit();
 }
 
-unregister_setting( 'sssf-sms-46elks-settings', 'sssf-sms-46elks-id' );
-unregister_setting( 'sssf-sms-46elks-settings', 'sssf-sms-46elks-sec' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-from' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-filter' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-default-countrycode' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-balancealert' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-balancealert-sent' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-api-username' );
+unregister_setting( 'wp-sms-46elks-settings', 'wp-sms-46elks-api-password' );
