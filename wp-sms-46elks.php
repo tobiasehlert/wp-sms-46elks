@@ -70,8 +70,10 @@ if ( !class_exists( 'WPSMS46elks' ) )
             add_filter( 'user_contactmethods', array( $this, 'wpsms46elks_user_contactmethods' ) );
             
             // adding jquery if it's not enqueued yet
-            if ( wp_style_is( 'jquery' ) )
                 wp_enqueue_script('jquery');
+            
+            // adding gsm charset counter javascript
+            add_action( 'admin_enqueue_scripts', array( $this, 'wpsms46elks_jquery_smscharcount' ) );
         }
 
         function wpsms46elks_init ()
@@ -102,6 +104,12 @@ if ( !class_exists( 'WPSMS46elks' ) )
             
             // getting the current account balance for status window
             $this->getAccountRequest();
+        }
+        
+        function wpsms46elks_jquery_smscharcount ()
+        {
+            wp_register_script( 'jquery_smscharcount', plugin_dir_url( __FILE__ ) . 'admi/js/jquery.smscharcount.js', array('jquery') );
+            wp_enqueue_script( 'jquery_smscharcount' );
         }
         
         function wpsms46elks_wp_dashboard_setup ()
@@ -481,20 +489,26 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                             <script type="text/javascript" >
                                             jQuery(document).ready(function()
                                             {
-                                                jQuery('#wp-sms-46elks-message').keyup(function()
-                                                {
-                                                    var chars = this.value.length,
-                                                        smslength = 160;
-                                                        messages = Math.ceil(chars / smslength),
-                                                        remaining = messages * smslength - (chars % (messages * smslength) || messages * smslength);
+                                                smslengthdefault    = 160;
+                                                smslengthspecial    = 70;
+                                                
+                                                jQuery('#wp-sms-46elks-message').smsCharCount({ 
+                                                    onUpdate: function(data){
                                                     jQuery('#wp-sms-46elks-submit').attr("disabled", false);
-                                                    jQuery('#wp-sms-46elks-message-used-chars').text(remaining);
-                                                    jQuery('#wp-sms-46elks-message-sms-count').text(messages);
-                                                    if ( remaining == 0 && messages == 0 )
-                                                    {
-                                                        remaining = smslength;
-                                                        messages = 1;
+                                                        jQuery('#wp-sms-46elks-message-used-chars').text(data.charRemaining);
+                                                        jQuery('#wp-sms-46elks-message-sms-count').text(data.messageCount);
+                                                        
+                                                        if ( data.isUnicode == true ) {
+                                                            jQuery('#wp-sms-46elks-message-total-chars').text( smslengthspecial );
+                                                        } else {
+                                                            jQuery('#wp-sms-46elks-message-total-chars').text( smslengthdefault );
+                                                        }
+                                                        
+                                                        if ( data.charRemaining === 0 && data.messageCount === 0 ) {
+                                                            jQuery('#wp-sms-46elks-message-used-chars').text( smslengthdefault );
+                                                            jQuery('#wp-sms-46elks-message-sms-count').text( 1 );
                                                         jQuery('#wp-sms-46elks-submit').attr("disabled", true);
+                                                    }
                                                     }
                                                 });
                                             });
