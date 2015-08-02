@@ -210,12 +210,12 @@ if ( !class_exists( 'WPSMS46elks' ) )
 
         function generateAccountInformation ( $data  = '' )
         {
-            if ( strlen( $data->displayname ) > 0 )
+            if ( isset( $data->displayname ) )
                 $this->setAccountType( 'main' );
-            elseif ( strlen( $data->name ) > 0 )
+            elseif ( isset( $data->name ) )
                 $this->setAccountType( 'sub' );
             
-            if ( $this->getAccountType() == 'main' )
+            if ( $this->getAccountType() === 'main' )
             {
                 $this->setAccountBalance( 'name', $data->displayname );
                 
@@ -227,7 +227,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 else
                     $this->setAccountBalance( 'leftcred', '0' );
             }
-            elseif ( $this->getAccountType() == 'sub' )
+            elseif ( $this->getAccountType() === 'sub' )
             {
                 $this->setAccountBalance( 'name', $data->name );
 
@@ -390,7 +390,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                         if ( $this->getAccountLimited() )
                             echo $this->convertBalanceValue( $this->getAccountBalance( 'leftcred' ) ).' sek';
                         else
-                            echo _e( 'unavailable', $this->plugin_slug );
+                            _e( 'unavailable', $this->plugin_slug );
                         ?></b>
                 </p>
                 <?php
@@ -756,7 +756,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             $data = $this->handleResponse( $this->response );
             $data['body'] = json_decode( $data['servermsg']['body'] );
 
-            if ( $data['servermsg']['code'] == 200 )
+            if ( $data['servermsg']['code'] === 200 )
             {
                 $list = $data['body']->data;
                 
@@ -783,7 +783,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                         $data = $this->handleResponse( $this->response );
                         $data['body'] = json_decode( $data['servermsg']['body'] );
 
-                        if ( $data['servermsg']['code'] == 200 )
+                        if ( $data['servermsg']['code'] === 200 )
                         {
                             $list = array_merge($list, $data['body']->data);
                         }
@@ -817,13 +817,13 @@ if ( !class_exists( 'WPSMS46elks' ) )
                         $month      = substr( $sms->created, 0, 7 );
                         $numstart   = substr( $sms->to, 0, 4 );
 
-                        if ( isset( $costmounth[$month] ) == false )
+                        if ( isset( $costmounth[$month] ) === false )
                             $costmounth[$month] = 0;
                         $costmonth[$month] = $costmonth[$month] + $sms->cost;
 
-                        if ( isset( $numbermonth[$month] ) == false )
+                        if ( isset( $numbermonth[$month] ) === false )
                             $numbermonth[$month] = array();
-                        if ( isset( $numbermonth[$month][$numstart] ) == false )
+                        if ( isset( $numbermonth[$month][$numstart] ) === false )
                             $numbermonth[$month][$numstart] = 0;
                         $numbermonth[$month][$numstart] = $numbermonth[$month][$numstart] + 1;
                     }
@@ -851,7 +851,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                 
                                 foreach($numbermonth[$month] as $number => $amount )
                                 {
-                                    $i++;
+                                    ++$i;
                                     if ( $i != 1 )
                                         $linebreak = '<br />';
                                     else
@@ -902,8 +902,8 @@ if ( !class_exists( 'WPSMS46elks' ) )
             if ( strlen( $settingsfilter ) > 0 )
             {
                 // extra filter based from settings
-                $data = explode( " ", $settingsfilter );
-                if ( count( $data ) == 3 )
+                $data = explode( ' ', $settingsfilter );
+                if ( count( $data ) === 3 )
                 {
                     $data = array(
                             'key' => trim( $data['0'] ),
@@ -934,8 +934,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         function convertToInternational( $number )
         {
-                $number = str_replace( ' ', '', $number );
-                $number = str_replace( '-', '', $number );
+                $number = str_replace( '-', '', str_replace( ' ', '', $number ) );
                 $number = preg_replace( '/^00/',    '+',    $number );
                 // FIXME add option to set default country code ( $this->plugin_slug.'-default-countrycode' )
                 $number = preg_replace( '/^0/',     '+46',  $number );
