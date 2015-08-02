@@ -48,10 +48,11 @@ if ( !class_exists( 'WPSMS46elks' ) )
         private         $API_uri        = 'https://api.46elks.com/a1';
 
         protected       $AccountBalance;
-        protected       $receivers  = array();
-        protected       $message;
-        protected       $result     = array();
-        protected       $status     = array();
+        protected       $FromOptions    = array();
+        protected       $receivers      = array();
+        protected       $sms            = array();
+        protected       $result         = array();
+        protected       $status         = array();
 
 
         public function __construct()
@@ -70,7 +71,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             add_filter( 'user_contactmethods', array( $this, 'wpsms46elks_user_contactmethods' ) );
             
             // adding jquery if it's not enqueued yet
-                wp_enqueue_script('jquery');
+            wp_enqueue_script('jquery');
             
             // adding gsm charset counter javascript
             add_action( 'admin_enqueue_scripts', array( $this, 'wpsms46elks_jquery_smscharcount' ) );
@@ -87,8 +88,9 @@ if ( !class_exists( 'WPSMS46elks' ) )
             // check if message is longer than zero
             if ( strlen( $_POST['wp-sms-46elks-message'] ) > 0 )
             {
-                // add message content to SMS
+                // add message content and from to SMS
                 $this->addMessage( $_POST['wp-sms-46elks-message'] );
+                $this->addFrom( $_POST['wp-sms-46elks-from'] );
                 
                 // sending of the SMS
                 $this->sendSMS();
@@ -108,11 +110,18 @@ if ( !class_exists( 'WPSMS46elks' ) )
             
             // getting the current account balance for status window
             $this->getAccountRequest();
+            
+            $settingsfrom = get_option( $this->plugin_slug.'-from' );
+            if ( ! empty( $settingsfrom ) )
+                $this->setFromOption( $settingsfrom );
+            
+            // getting list of numbers allocated to 46elks account
+            $this->getAccountFromNumbers();
         }
         
         function wpsms46elks_jquery_smscharcount ()
         {
-            wp_register_script( 'jquery_smscharcount', plugin_dir_url( __FILE__ ) . 'admi/js/jquery.smscharcount.js', array('jquery') );
+            wp_register_script( 'jquery_smscharcount', plugin_dir_url( __FILE__ ) . 'admin/js/jquery.smscharcount.js', array('jquery') );
             wp_enqueue_script( 'jquery_smscharcount' );
         }
         
@@ -162,7 +171,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     $this->result['success']++;
                 else
                     $this->result['failed']++;
-                
+
                 $return = array(
                     'status' => 'success',
                     'servermsg' => array(
@@ -355,6 +364,16 @@ if ( !class_exists( 'WPSMS46elks' ) )
             else
                 return '';
         }
+        
+        function setFromOption ( $data = array() )
+        {
+            array_push( $this->FromOptions, $data );
+            return true;
+        }
+        function getFromOption ()
+        {
+            return $this->FromOptions;
+        }
                 
         function triggerAlertEmail ()
         {
@@ -373,6 +392,28 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 return false;
         }
 
+        function getAccountFromNumbers ()
+        {
+            // creating WP_remote_post and performing sending
+            $sms = $this->generateSMSbasics();
+            $this->response = wp_remote_get(
+                $this->API_uri.'/Numbers',
+                $sms
+            );
+            
+            $data = $this->handleResponse( $this->response );
+            $data['body'] = json_decode( $data['servermsg']['body'] );
+
+            if ( ! empty ( $data['body']->data ) )
+            {
+                foreach ( $data['body']->data as $key => $value )
+                {
+                    // look throu the list of phonenumbers.. getting implementet later!
+                    //$this->setFromOption() );
+                }
+            }
+        }
+        
 
         function wpsms46elks_account_status()
         {
@@ -488,7 +529,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                     <div class="postbox " id="wp-sms-46elks-new"  >
                                         <h3 class="hndle" style="cursor: inherit;"><span><?php _e( 'Send SMS', $this->plugin_slug );?></span></h3>
                                         <div class="inside">
-
+                                            
                                             <script type="text/javascript" >
                                             jQuery(document).ready(function()
                                             {
@@ -497,7 +538,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                                 
                                                 jQuery('#wp-sms-46elks-message').smsCharCount({ 
                                                     onUpdate: function(data){
-                                                    jQuery('#wp-sms-46elks-submit').attr("disabled", false);
+                                                        jQuery('#wp-sms-46elks-submit').attr("disabled", false);
                                                         jQuery('#wp-sms-46elks-message-used-chars').text(data.charRemaining);
                                                         jQuery('#wp-sms-46elks-message-sms-count').text(data.messageCount);
                                                         
@@ -510,8 +551,8 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                                         if ( data.charRemaining === 0 && data.messageCount === 0 ) {
                                                             jQuery('#wp-sms-46elks-message-used-chars').text( smslengthdefault );
                                                             jQuery('#wp-sms-46elks-message-sms-count').text( 1 );
-                                                        jQuery('#wp-sms-46elks-submit').attr("disabled", true);
-                                                    }
+                                                            jQuery('#wp-sms-46elks-submit').attr("disabled", true);
+                                                        }
                                                     }
                                                 });
                                             });
@@ -519,7 +560,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
 
                                             <style type="text/css">
                                             @media screen and (min-width: 783px) {
-                                                .form-table td textarea {
+                                                .form-table td textarea, .form-table td select {
                                                     width: 25em;
                                                 }
                                             }
@@ -530,7 +571,27 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                                     <tbody>
                                                         <tr>
                                                             <th><label for="wp-sms-46elks-from"><?php _e( 'From', $this->plugin_slug );?></label></th>
-                                                            <td><input type="text" name="wp-sms-46elks-from" id="wp-sms-46elks-from" value="<?php echo get_option($this->plugin_slug.'-from'); ?>" class="regular-text" readonly ></td>
+                                                            <td>
+                                                                <select id="wp-sms-46elks-from" name="wp-sms-46elks-from" >
+                                                                    <?php
+                                                                    $from = $this->getFromOption();
+                                                                    if ( ! empty ( $from ) )
+                                                                    {
+                                                                        foreach ( $from as $key => $value )
+                                                                        {
+                                                                            ?><option value="<?php echo $value; ?>" ><?php echo $value; ?></option><?php
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        ?><option value="<?php echo trim( substr( $this->getAccountBalance( 'name' ), 0, 11 ) ); ?>" ><?php echo trim( substr( $this->getAccountBalance( 'name' ), 0, 11 ) ); ?></option><?php
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                                <p class="description">
+                                                                    <?php _e( 'Choose weither you want to send SMS from your phonenumber you got allocated to your 46elks account or name as text.', $this->plugin_slug ); ?><br />
+                                                                    <?php _e( 'Your name need to be specified in the settings. If no numbers exist and no name is set, we will pick the first 11 chars from your 46elks account name.', $this->plugin_slug ); ?>
+                                                                </p>
                                                         </tr>
                                                         <tr>
                                                             <th><label for="wp-sms-46elks-message"><?php _e( 'Message content', $this->plugin_slug );?></label></th>
@@ -943,7 +1004,12 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         function addMessage( $message )
         {
-            $this->message = $message;
+            $this->sms['message'] = $message;
+            return true;
+        }
+        function addFrom( $from )
+        {
+            $this->sms['from'] = $from;
             return true;
         }
         
@@ -978,25 +1044,25 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     }
                 }
                 
-                        $sms = $this->generateSMSbasics();
-                        $sms['body'] = array(
-                            'from'      => get_option($this->plugin_slug.'-from'),
+                $sms = $this->generateSMSbasics();
+                $sms['body'] = array(
+                    'from'      => $this->sms['from'],
                     'to'        => $phonelist,
-                            'message'   => $this->message
-                        );
+                    'message'   => $this->sms['message']
+                );
 
-                        // creating WP_remote_post and performing sending
+                // creating WP_remote_post and performing sending
 
-                        $this->response = wp_remote_post(
-                            $this->API_uri.'/SMS',
-                            $sms
-                        );
-                        
-                        $data = $this->handleResponse( $this->response );
-                        $data['body'] = json_decode( $data['servermsg']['body'] );
-                        
+                $this->response = wp_remote_post(
+                    $this->API_uri.'/SMS',
+                    $sms
+                );
+                
+                $data = $this->handleResponse( $this->response );
+                $data['body'] = json_decode( $data['servermsg']['body'] );
+
                 if ( isset( $data['body']->cost ) )
-                        $this->totalSMScost += $data['body']->cost;
+                    $this->totalSMScost += $data['body']->cost;
             }
 
         }
