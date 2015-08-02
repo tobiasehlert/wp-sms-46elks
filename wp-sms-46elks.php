@@ -81,6 +81,9 @@ if ( !class_exists( 'WPSMS46elks' ) )
             // Add receivers based on Wordpress setup for wp-sms-46elks
             $this->addReceiversFromWP();
             
+            // count all receivers for counters
+            $this->totalReceivers = count( $this->getReceivers() );
+            
             // check if message is longer than zero
             if ( strlen( $_POST['wp-sms-46elks-message'] ) > 0 )
             {
@@ -93,8 +96,9 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 // giving success message
                 if ( $this->result['success'] >= 1 )
                 {
-                    $this->status['success'] = __('Your message was successful when sending to', $this->plugin_slug ).' '.$this->result['success'].' '.__('cellphones', $this->plugin_slug ).'!<br />'.
-                        __('The SMS cost was ', $this->plugin_slug ).$this->convertBalanceValue ( $this->totalSMScost ).' sek';
+                    $this->status['success'] = __('Your message was successful when sending to', $this->plugin_slug ).' '.$this->result['success'].' '.__('cellphones', $this->plugin_slug ).'!<br />';
+                    if ( $this->totalSMScost > 0 )
+                        $this->status['success'] .= __('The SMS cost was ', $this->plugin_slug ).$this->convertBalanceValue ( $this->totalSMScost ).' sek';
                 }
                 if ( $this->result['failed'] >= 1 )
                     $this->status['failed'] = __('Your message failed when sending to', $this->plugin_slug ).' '.$this->result['failed'].' '.__('cellphones', $this->plugin_slug ).'!';
@@ -147,7 +151,6 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         function handleResponse ( $response )
         {
-            // saving result for later
             if ( is_wp_error( $response ) ) {
                 $return = array(
                     'status' => 'error',
@@ -251,7 +254,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             // run is its a limited account
             if ( $this->getAccountLimited() )
             {
-                if ( ( count( $this->getReceivers() ) * $this->credMultiply ) >= $this->getAccountBalance( 'leftcred' ) )
+                if ( ( $this->totalReceivers * $this->credMultiply ) >= $this->getAccountBalance( 'leftcred' ) )
                     $this->setAccountNoCredits( true );
                 else
                 {
@@ -577,11 +580,14 @@ if ( !class_exists( 'WPSMS46elks' ) )
                                     <div class="inside">
                                         <div id="misc-publishing-actions">
                                             <p>
-                                                <?php _e( 'Current amount of receivers', $this->plugin_slug ); echo count( $this->getReceivers() ); ?>
+                                                <?php
+                                                _e( 'Current amount of receivers', $this->plugin_slug );
+                                                echo ': '.$this->totalReceivers;
+                                                ?>
                                             </p>
                                             <p>
                                                 <?php
-                                                if ( count( $this->getReceivers() ) > 0 )
+                                                if ( $this->totalReceivers > 0 )
                                                 {
                                                     foreach ( $this->getReceivers() as $key => $value )
                                                     {
@@ -956,23 +962,32 @@ if ( !class_exists( 'WPSMS46elks' ) )
         function sendSMS ()
         {
             // check if there are any receivers
-            if ( count( $this->getReceivers() ) > 0 )
+            if ( $this->totalReceivers > 0 )
             {
                 unset( $this->result );
+                $phonelist;
                 
                 // foreach on receivers
                 foreach ( $this->getReceivers() as $key => $value )
                 {
                     foreach ( $value as $phone => $name )
                     {
+                        ++$i;
+                        if ( $i > 1 )
+                            $phonelist .= ',';
+                        $phonelist .= $phone;
+                    }
+                }
+                
                         $sms = $this->generateSMSbasics();
                         $sms['body'] = array(
                             'from'      => get_option($this->plugin_slug.'-from'),
-                            'to'        => $phone,
+                    'to'        => $phonelist,
                             'message'   => $this->message
                         );
 
                         // creating WP_remote_post and performing sending
+
                         $this->response = wp_remote_post(
                             $this->API_uri.'/SMS',
                             $sms
@@ -981,13 +996,10 @@ if ( !class_exists( 'WPSMS46elks' ) )
                         $data = $this->handleResponse( $this->response );
                         $data['body'] = json_decode( $data['servermsg']['body'] );
                         
+                if ( isset( $data['body']->cost ) )
                         $this->totalSMScost += $data['body']->cost;
-                        
-                        if ( $this->debug && is_super_admin() )
-                            array_push( $this->APIresult, $data );
-                    }
-                }
             }
+
         }
         
         function wpsms46elks_user_contactmethods ( $profile_fields )
