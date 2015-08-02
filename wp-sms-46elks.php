@@ -1076,7 +1076,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         
         
         function wpsms46elks_admin_menu() {
-            add_menu_page( __( 'WordPress SMS for 46elks', $this->plugin_slug ), __('SMS via 46elks', $this->plugin_slug ), 'publish_pages', $this->plugin_slug, array( $this, 'wpsms46elks_gui' ), 'dashicons-testimonial', 3.98765  );
+            add_menu_page( __( 'WordPress SMS for 46elks', $this->plugin_slug ), __('SMS via 46elks', $this->plugin_slug ), 'publish_pages', $this->plugin_slug, array( $this, 'wpsms46elks_gui' ), 'dashicons-testimonial', '3.98765'  );
         }
         
         function wpsms46elks_admin_init()
