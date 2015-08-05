@@ -408,8 +408,8 @@ if ( !class_exists( 'WPSMS46elks' ) )
             {
                 foreach ( $data['body']->data as $key => $value )
                 {
-                    // look throu the list of phonenumbers.. getting implementet later!
-                    //$this->setFromOption() );
+                    if ( $value->active === 'yes' )
+                        $this->setFromOption( $value->number );
                 }
             }
         }
