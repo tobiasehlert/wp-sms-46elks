@@ -5,12 +5,12 @@
  * @package     wp-sms-46elks
  * @author      Tobias Ehlert
  * @license     GPL2
- * @link        http://ehlert.se/wordpress-plugins/wp-sms-46elks/
+ * @link        http://ehlert.se/wordpress/wp-sms-46elks/
  */
 
 /*
 Plugin Name:    WordPress SMS for 46elks
-Plugin URI:     http://ehlert.se/wordpress-plugins/wp-sms-46elks/
+Plugin URI:     http://ehlert.se/wordpress/wp-sms-46elks/
 Description:    WordPress module for sending SMS using 46elks. It's displayed in the WordPress admin area.
 Version:        0.2
 Author:         Tobias Ehlert
@@ -110,13 +110,6 @@ if ( !class_exists( 'WPSMS46elks' ) )
             
             // getting the current account balance for status window
             $this->getAccountRequest();
-            
-            $settingsfrom = get_option( $this->plugin_slug.'-from' );
-            if ( ! empty( $settingsfrom ) )
-                $this->setFromOption( $settingsfrom );
-            
-            // getting list of numbers allocated to 46elks account
-            $this->getAccountFromNumbers();
         }
         
         function wpsms46elks_jquery_smscharcount ()
@@ -149,7 +142,13 @@ if ( !class_exists( 'WPSMS46elks' ) )
                 <hr />
                 <?php
             }
+            // get the account status from function
             $this->wpsms46elks_account_status();
+            
+            if ( $this->getAccountType() === 'main' )
+            {
+                $this->wpsms46elks_subaccount_balance();
+            }
             ?>
             <hr />
             <p>
@@ -374,6 +373,17 @@ if ( !class_exists( 'WPSMS46elks' ) )
         {
             return $this->FromOptions;
         }
+        function getFromForGUI ()
+        {
+            $settingsfrom = get_option( $this->plugin_slug.'-from' );
+            if ( ! empty( $settingsfrom ) )
+                $this->setFromOption( $settingsfrom );
+            
+            // getting list of numbers allocated to 46elks account
+            $this->getAccountFromNumbers();
+            
+            return true;
+        }
                 
         function triggerAlertEmail ()
         {
@@ -446,6 +456,49 @@ if ( !class_exists( 'WPSMS46elks' ) )
             }
         }
         
+        function wpsms46elks_subaccount_balance ()
+        {
+            // creating WP_remote_post and performing sending
+            $sms = $this->generateSMSbasics();
+            $this->response = wp_remote_get(
+                $this->API_uri.'/subaccounts',
+                $sms
+            );
+            
+            $data = $this->handleResponse( $this->response );
+            $data['body'] = json_decode( $data['servermsg']['body'] );
+
+            if ( isset( $data['body']->data ) && $data['servermsg']['code'] == 200 )
+            {
+                ?>
+                <hr />
+                <br />
+                <h4><?php _e( 'All 46elks subaccounts', $this->plugin_slug ); ?></h4>
+                <?php
+                foreach ( $data['body']->data as $key => $value )
+                {
+                    ?>
+                    <p>
+                        <b><?php echo $value->name; ?></b><br />
+                        _e( 'Credits used', $this->plugin_slug ); ?>: <?php echo $this->convertBalanceValue( $value->balanceused ); echo ' sek<br />';
+                    
+                        if ( isset( $value->usagelimit ) )
+                        {
+                            _e( 'Account limit', $this->plugin_slug ); ?>: <?php echo $this->convertBalanceValue( $value->usagelimit ); echo ' sek<br />';
+                            _e( 'Credits left', $this->plugin_slug ); ?>: <?php echo $this->convertBalanceValue( ( $value->usagelimit - $value->balanceused ) ); echo ' sek<br />';
+                            _e( 'Percentage usage', $this->plugin_slug ); ?>: <?php echo ( $value->balanceused / $value->usagelimit * 100 ); echo '%';
+                        }
+                        else
+                        {
+                            _e( 'Account limit', $this->plugin_slug ); ?>: <i><?php _e( 'unlimited', $this->plugin_slug ); ?></i><?php
+                        }
+                        ?>
+                    </p>
+                    <?php
+                }
+            }
+        }
+        
         // function to make value more readable
         function convertBalanceValue ( $value = 0 )
         {
@@ -455,6 +508,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         // function that displays the whole WP-admin GUI
         function wpsms46elks_gui ()
         {
+            $this->getFromForGUI();
             ?>
             <div class="wrap">
 

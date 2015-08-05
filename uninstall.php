@@ -5,7 +5,7 @@
  * @package     wp-sms-46elks
  * @author      Tobias Ehlert
  * @license     GPL2
- * @link        http://ehlert.se/wordpress-plugins/wp-sms-46elks/
+ * @link        http://ehlert.se/wordpress/wp-sms-46elks/
  */
 
 // If uninstall is not called from WordPress, exit
