@@ -480,6 +480,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     ?>
                     <p>
                         <b><?php echo $value->name; ?></b><br />
+                        <?php
                         _e( 'Credits used', $this->plugin_slug ); ?>: <?php echo $this->convertBalanceValue( $value->balanceused ); echo ' sek<br />';
                     
                         if ( isset( $value->usagelimit ) )
