@@ -51,7 +51,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
         protected       $FromOptions    = array();
         protected       $receivers      = array();
         protected       $sms            = array();
-        protected       $result         = array();
+        protected       $result         = array( 'success' => '0', 'failed' => '0' );
         protected       $status         = array();
 
 
@@ -86,7 +86,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             $this->totalReceivers = count( $this->getReceivers() );
             
             // check if message is longer than zero
-            if ( strlen( $_POST['wp-sms-46elks-message'] ) > 0 )
+            if ( isset( $_POST['wp-sms-46elks-message'] ) && strlen( $_POST['wp-sms-46elks-message'] ) > 0 )
             {
                 // add message content and from to SMS
                 $this->addMessage( $_POST['wp-sms-46elks-message'] );
