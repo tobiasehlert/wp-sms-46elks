@@ -12,7 +12,7 @@
 Plugin Name:    WordPress SMS for 46elks
 Plugin URI:     http://ehlert.se/wordpress/wp-sms-46elks/
 Description:    WordPress module for sending SMS using 46elks. It's displayed in the WordPress admin area.
-Version:        0.3
+Version:        0.3.1
 Author:         Tobias Ehlert
 Author URI:     http://ehlert.se/
 License:        GPL2
