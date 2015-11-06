@@ -71,7 +71,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
             add_filter( 'user_contactmethods', array( $this, 'wpsms46elks_user_contactmethods' ) );
             
             // adding jquery if it's not enqueued yet
-            wp_enqueue_script('jquery');
+            add_action( 'admin_enqueue_scripts', array( $this, 'wpsms46elks_load_jquery' ) );
             
             // adding gsm charset counter javascript
             add_action( 'admin_enqueue_scripts', array( $this, 'wpsms46elks_jquery_smscharcount' ) );
@@ -110,6 +110,11 @@ if ( !class_exists( 'WPSMS46elks' ) )
             
             // getting the current account balance for status window
             $this->getAccountRequest();
+        }
+        
+        function wpsms46elks_load_jquery ()
+        {
+            wp_enqueue_script('jquery');
         }
         
         function wpsms46elks_jquery_smscharcount ()
