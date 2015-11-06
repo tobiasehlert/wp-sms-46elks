@@ -844,7 +844,7 @@ if ( !class_exists( 'WPSMS46elks' ) )
                     </div>
                 </div>
             </div><!-- div wrap -->
-            <?
+            <?php
         }
 
 
